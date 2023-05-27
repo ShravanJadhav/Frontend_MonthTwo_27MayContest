@@ -28,19 +28,24 @@ function renderTable(data) {
      <th>Symbol</th>
      <th>Price</th>
      <th>Percentage</th>
-     <th>Volume</th>
+     <th>Market_Cap</th>
    </tr>
  `;
  
  data.forEach(coin => {
    const row = document.createElement('tr');
+
+   const priceChangePercentage = coin.price_change_percentage_24h;
+  // Determine the color based on the price change percentage
+  const color = priceChangePercentage < 0 ? 'red' : 'green';
+  
    row.innerHTML = `
      <td><img src="${coin.image}" alt="${coin.name}" width="40"></td>  
      <td>${coin.name}</td>
      <td>${coin.symbol}</td>
-     <td>${coin.current_price}</td>
-     <td>${coin.atl_change_percentage}</td>
-     <td>${coin.total_volume}</td>
+     <td>$ ${coin.current_price}</td>
+     <td style="color: ${color}">${coin.price_change_percentage_24h} %</td>
+     <td> Mkt Cap : $ ${coin.market_cap}</td>
    `;
    table.appendChild(row);
  });
@@ -54,7 +59,7 @@ function filterTable() {
  const rows = table.getElementsByTagName('tr');
 
  for (let i = 1; i < rows.length; i++) {
-   const name = rows[i].getElementsByTagName('td')[0];
+   const name = rows[i].getElementsByTagName('td')[1];
    if (name) {
      const textValue = name.textContent || name.innerText;
      if (textValue.toUpperCase().indexOf(filter) > -1) {
